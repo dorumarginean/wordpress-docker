@@ -1,0 +1,64 @@
+version: '3.9'
+
+services:
+    # Web Server
+    nginx:
+        container_name: ${PROJECT_NAME}-nginx
+        # image: nginx:stable-alpine # name:version-software
+        build: # Build the container using local file 'php.dockerfile'
+            context: .
+            dockerfile: nginx.dockerfile
+        depends_on: # start 'php' and 'mysql' containers before 'nginx'
+            - php
+            - mysql
+        ports:
+            - 80:80 # localhost -> nginx container port
+            - 443:443
+        volumes:
+            #- ./nginx/default.conf:/etc/nginx/conf.d/default.conf # use local nginx config file
+            - ./wordpress:/var/www/html # symlink local with nginx container files
+    
+    # Database
+    mysql:
+        container_name: ${PROJECT_NAME}-mysql
+        image: mysql:latest
+        environment: 
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        volumes:
+            - ./mysql:/var/lib/mysql # sync local folder with container db files
+
+    # phpMyAdmin
+    phpmyadmin:
+        container_name: ${PROJECT_NAME}-phpmyadmin
+        image: phpmyadmin
+        depends_on: ['mysql']
+        restart: always
+        ports: ['8080:80']
+        links: ['mysql:mysql']
+        environment: 
+            PMA_HOST: mysql
+            PMA_USER: ${MYSQL_USER}
+            PMA_PASSWORD: ${MYSQL_PASSWORD}
+
+    # Scripting language
+    php:
+        container_name: ${PROJECT_NAME}-php
+        # image: php:7.4-fpm-alpine # Image from the Docker hub
+        build: # Build the container using local file 'php.dockerfile'
+            context: . 
+            dockerfile: php.dockerfile
+        volumes:
+            - ./wordpress:/var/www/html
+
+    # WP Cli
+    wp:
+        container_name: ${PROJECT_NAME}-wpcli
+        build:
+            context: .
+            dockerfile: php.dockerfile
+        volumes:
+            - ./wordpress:/var/www/html
+        entrypoint: ['wp', '--allow-root'] # Array of commands that fire off when the container runs
