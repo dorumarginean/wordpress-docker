@@ -2,28 +2,46 @@
 A simplified yet refined Docker Compose workflow that sets up a LEMP network of containers for local WordPress development based on [Docker Compose WordPress by Andrew Schmelyun](https://github.com/aschmelyun/docker-compose-wordpress)
 
 ## Additions to the original repo
-- phpMyAdmin container for interacting with the database
-- .env file for securing variables
-
+- `phpMyAdmin` container for interacting with the database
+- `.env` file for securing variables
+- improved `README.md` documentation
+ 
 ## Usage
 
-#### 1. Edit your hosts file and add:
+1. Edit your `etc/hosts` file and add:
 
 ```php
+# Map the custom domain to the local ip address
 127.0.0.1 wordpress-docker.local www.wordpress-docker.local
 ```
-#### 2. [Install Docker](https://docs.docker.com/get-docker/) on your system
-#### 3. Clone [this repository](https://github.com/dorumarginean/wordpress-docker.git)
+2. [Install Docker](https://docs.docker.com/get-docker/) on your system
+3. Clone [this repository](https://github.com/dorumarginean/wordpress-docker.git)
 ```php
 # This will create the folder 'wordpress-docker'
 git clone https://github.com/dorumarginean/wordpress-docker.git
 ```
-#### 4. Navigate to the directory you cloned this and spin up the containers for the web server:
+4. Navigate to the directory you cloned this and spin up the containers for the web server:
 ```php
 docker-compose up -d --build site
 ```
+5. Enable SSL
 
-After that completes, follow the steps from the [src/README.md](src/README.md) file to get your WordPress installation added in (or create a new blank one).
+We will use `mkcert` to generate a self-signed SSL certificate. You can download `mkcert` using `Chocolatey` on Windows.
+- [Install Chocolatey](https://chocolatey.org/install)
+- Install Mkcert
+```php
+choco install mkcert
+```
+- Create a local Certificate Authority (CA)
+```php
+# Open an elevated (e.g. Run as Administrator) command line
+mkcert -install
+```
+- Create a certificate
+```php
+# Open an elevated (e.g. Run as Administrator) command line
+mkcert wordpress-docker.test
+```
 
 Bringing up the Docker Compose network with `site` instead of just using `up`, ensures that only our site's containers are brought up at the start, instead of all of the command containers as well. The following are built for our web server, with their exposed ports detailed:
 
