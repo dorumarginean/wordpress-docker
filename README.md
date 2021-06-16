@@ -24,7 +24,15 @@ git clone https://github.com/dorumarginean/wordpress-docker.git
 ```php
 docker-compose up -d --build site
 ```
-5. Enable SSL
+5. Download WordPress using WP-cli
+```php
+# Navigate to the WordPress directory
+cd wordpress
+
+# Get the core WordPress files
+wp core download
+```
+6. Enable SSL
 
 We will use `mkcert` to generate a self-signed SSL certificate. You can download `mkcert` using `Chocolatey` on Windows.
 - [Install Chocolatey](https://chocolatey.org/install)
@@ -40,7 +48,7 @@ mkcert -install
 - Create a certificate
 ```php
 # Open an elevated (e.g. Run as Administrator) command line
-mkcert wordpress-docker.test
+mkcert wordpress-docker.local
 ```
 
 Bringing up the Docker Compose network with `site` instead of just using `up`, ensures that only our site's containers are brought up at the start, instead of all of the command containers as well. The following are built for our web server, with their exposed ports detailed:
@@ -58,7 +66,7 @@ An additional container is included that lets you use the wp-cli app without hav
 By default, whenever you bring down the Docker network, your MySQL data will be removed after the containers are destroyed. If you would like to have persistent data that remains after bringing containers down and back up, do the following:
 
 1. Create a `mysql` folder in the project root, alongside the `nginx` and `php` folders.
-2. Under the mysql service in your `docker-compose.yml` file, add the following lines:
+2. Under the mysql service in your `docker-compose.yml` file, uncomment the following lines:
 
 ```
 volumes:

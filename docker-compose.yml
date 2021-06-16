@@ -27,8 +27,8 @@ services:
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-        volumes:
-            - ./mysql:/var/lib/mysql # sync local folder with container db files
+        # volumes:
+        #    - ./mysql:/var/lib/mysql # sync local folder with container db files
 
     # phpMyAdmin
     phpmyadmin:
