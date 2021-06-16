@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
     # Web Server
-    nginx:
+    site:
         container_name: ${PROJECT_NAME}-nginx
         # image: nginx:stable-alpine # name:version-software
         build: # Build the container using local file 'php.dockerfile'
