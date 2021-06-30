@@ -21,7 +21,7 @@ services:
     # Database
     mysql:
         container_name: ${PROJECT_NAME}-mysql
-        image: mysql:latest
+        image: mysql:5.7
         environment: 
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
