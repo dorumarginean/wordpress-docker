@@ -9,6 +9,56 @@ To get started, make sure you have [Docker installed](https://docs.docker.com/do
 Next, navigate in your terminal to the directory you cloned this, and spin up the containers for the web server by running `docker-compose up -d --build site`.
 
 After that completes, follow the steps from the [src/README.md](src/README.md) file to get your WordPress installation added in (or create a new blank one).
+### 1. Edit your `etc/hosts` file:
+```php
+# Map the custom domain to the local ip address
+127.0.0.1 wordpress.local www.wordpress.local
+```
+### 2. [Install Docker](https://docs.docker.com/get-docker/) on your system
+
+### 3. Clone [this repository](https://github.com/dorumarginean/wordpress-docker.git)
+```php
+# This will create the folder 'wordpress-docker'
+git clone https://github.com/dorumarginean/wordpress-docker.git
+```
+### 4. Enable SSL
+We will use `mkcert` to generate a self-signed SSL certificate. You can download `mkcert` using `Chocolatey` on Windows.
+- [Install Chocolatey](https://chocolatey.org/install)
+- Install Mkcert
+```php
+choco install mkcert
+```
+- Create a local Certificate Authority (CA)
+
+Open an elevated (e.g. Run as Administrator) command line
+```php
+mkcert -install
+```
+- Create a certificate
+
+Navigate to `wordpress-docker/nginx/certs` 
+```php
+cd nginx/certs
+```
+Open an elevated (e.g. Run as Administrator) command line
+```php
+mkcert wordpress-docker.local
+```
+### 5. Download WordPress using WP-cli
+Navigate to the WordPress directory
+```php
+cd ../../wordpress
+```
+Get the core WordPress files
+```php
+wp core download
+```
+### 6. Navigate to the directory you cloned this and spin up the containers for the web server:
+```php
+docker-compose up -d --build site
+```
+
+
 
 Bringing up the Docker Compose network with `site` instead of just using `up`, ensures that only our site's containers are brought up at the start, instead of all of the command containers as well. The following are built for our web server, with their exposed ports detailed:
 
@@ -31,3 +81,6 @@ By default, whenever you bring down the Docker network, your MySQL data will be 
 volumes:
   - ./mysql:/var/lib/mysql
 ```
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
