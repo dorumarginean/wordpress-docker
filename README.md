@@ -42,7 +42,7 @@ cd nginx/certs
 ```
 Open an elevated (e.g. Run as Administrator) command line
 ```php
-mkcert wordpress-docker.local
+mkcert wordpress.local
 ```
 ### 5. Download WordPress using WP-cli
 Navigate to the WordPress directory
