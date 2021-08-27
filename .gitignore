@@ -1,5 +1,3 @@
-# WordPress core
-/wordpress 
-
-# Self-signed SSL certificates
-/nginx/certs/*
+mysql
+.DS_Store
+.idea

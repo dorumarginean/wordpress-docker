@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.5'
 
 services:
     # Web Server
@@ -21,14 +21,14 @@ services:
     # Database
     mysql:
         container_name: ${PROJECT_NAME}-mysql
-        image: mysql:latest
+        image: mysql:5.7
         environment: 
             MYSQL_DATABASE: ${MYSQL_DATABASE}
             MYSQL_USER: ${MYSQL_USER}
             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-        # volumes:
-        #    - ./mysql:/var/lib/mysql # sync local folder with container db files
+        volumes:
+            - ./mysql:/var/lib/mysql # sync local folder with container db files
 
     # phpMyAdmin
     phpmyadmin:
@@ -46,6 +46,7 @@ services:
     # Scripting language
     php:
         container_name: ${PROJECT_NAME}-php
+        user: "1000:1000" # User permission for container
         # image: php:7.4-fpm-alpine # Image from the Docker hub
         build: # Build the container using local file 'php.dockerfile'
             context: . 
